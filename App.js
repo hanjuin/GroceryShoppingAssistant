@@ -31,9 +31,6 @@ const requestPhotoLibraryPermission = async () => {
       PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
       {
         title: 'Photo Library Permission',
-        // message:
-        //   'Cool Photo App needs access to your camera ' +
-        //   'so you can take awesome pictures.',
         buttonNeutral: 'Ask Me Later',
         buttonNegative: 'Cancel',
         buttonPositive: 'OK',
@@ -48,7 +45,6 @@ const requestPhotoLibraryPermission = async () => {
     console.warn(err);
   }
 };
-
 
 const Drawer = createDrawerNavigator();
 

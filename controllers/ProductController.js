@@ -1,4 +1,4 @@
-import { processBarcodeFromImage, fetchOpenAIResponse } from '../models/ProductModel';
+import {processBarcodeFromImage, fetchOpenAIResponse, fetchOpenFoodFactsData } from '../models/ProductModel';
 
 export const handleBarcodeProcessing = async (base64Image) => {
   try {
@@ -19,3 +19,42 @@ export const handleOpenAIProcessing = async (barcode) => {
       throw error;
     }
   };
+
+export const handleOpenFoodAPI = async (barcode) => {
+    try {
+      const OpenAIResponse = await fetchOpenFoodFactsData(barcode);
+      return OpenAIResponse;
+    } catch (error) {
+      console.error('Error in OpenFoodDacts processing:', error);
+      throw error;
+    }
+};
+
+export const insertProductData = async (productData) => {
+    try {
+        const response = await fetch('http://10.0.2.2:3000/add-product', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(productData),
+        });
+        const result = await response.json();
+        console.log('Server Response:', result);
+      } catch (error) {
+        console.error('Error adding product to server:', error);
+    }
+};
+
+export const getProductByBarcode = async (barcode) => {
+    try {
+        const response = await fetch(`http://10.0.2.2:3000/get-product/${barcode}`);
+        if (!response.ok) {
+          throw new Error('Product not found');
+        }
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error('Error fetching product from server:', error);
+      }
+};

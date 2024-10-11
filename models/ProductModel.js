@@ -1,8 +1,6 @@
 import { VISION_API_KEY } from '@env';
 import { OPEN_AI_API_KEY } from '@env';
 
-
-// ProductController.js
 export const processBarcodeFromImage = async (base64Image) => {
     try {
       const apiKey = VISION_API_KEY;
@@ -73,5 +71,25 @@ export const processBarcodeFromImage = async (base64Image) => {
     } catch (error) {
       console.error('Error fetching OpenAI response:', error);
       return 'Failed to fetch data from OpenAI.';
+    }
+  };
+
+  export const fetchOpenFoodFactsData = async (barcode) => {
+    try {
+      const response = await fetch(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      if (data.status === 1) {
+        const productData = data.product;
+        return productData;
+      } else {
+        console.warn('Product not found in the Open Food Facts database.');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error fetching data from Open Food Facts:', error);
+      return null;
     }
   };
