@@ -6,9 +6,9 @@ const LogoutView = ({ navigation, route }) => {
 
   const handleLogout = async () => {
     try {
-      await AsyncStorage.removeItem('userToken'); // Remove token
-      const { setIsLoggedIn } = route.params; // Get the setter passed via params
-      setIsLoggedIn(false); // Update login state
+      await AsyncStorage.removeItem('userToken'); // Remove token from AsyncStorage
+      const { setIsLoggedIn } = route.params; // Get setIsLoggedIn from params
+      setIsLoggedIn(false); // Set login state to false
     } catch (error) {
       console.error('Logout error:', error);
     }
@@ -16,11 +16,11 @@ const LogoutView = ({ navigation, route }) => {
 
   useEffect(() => {
     const logout = async () => {
-      await handleLogout(); // Call logout logic
-      navigation.replace('Login'); // Navigate to login after logout
+      await handleLogout(); // Perform the logout
+      navigation.navigate('Login'); // Navigate to the login screen after logout
     };
     logout();
-  }, []);
+  }, [navigation]);
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
