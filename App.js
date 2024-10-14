@@ -81,7 +81,7 @@ const App = () => {
   // Display a loading screen while checking the login status
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View>
         <Text>Loading...</Text>
       </View>
     );

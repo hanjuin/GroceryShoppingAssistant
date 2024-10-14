@@ -5,7 +5,7 @@ const ShoppingListView = () =>{
     return(
         <View style={style.container}>
             <Text style = {style.title}>
-                ShoppingListView
+                Still in developing progress.. =)
             </Text>
         </View>
     );

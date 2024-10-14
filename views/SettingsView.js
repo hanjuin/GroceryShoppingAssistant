@@ -5,7 +5,7 @@ const SettingsView = () =>{
     return(
         <View style={style.container}>
             <Text style = {style.title}>
-                SettingsView
+                Still in developing progress.. =)
             </Text>
         </View>
     );

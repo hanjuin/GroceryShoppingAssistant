@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button, Image, Alert } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';
+import { View, Text, StyleSheet, Image, Alert, TouchableOpacity } from 'react-native';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
 import * as ProductController from '../controllers/ProductController';
 
@@ -9,22 +9,32 @@ const ProductScannerView = ({ navigation }) => {
 
   const selectImageFromLibrary = async () => {
     launchImageLibrary({ mediaType: 'photo' }, async (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.errorCode) {
-        console.error('ImagePicker error: ', response.errorMessage);
-      } else if (response.assets && response.assets.length > 0) {
-        const { uri } = response.assets[0];
-        setSelectedImage(uri);
-        const base64String = await convertImageToBase64(uri);
-        const actualBarcode = await handleImageProcessing(base64String);
-        if (actualBarcode) {
-          const OpenFoodAPIResponse = await ProductController.handleOpenFoodAPI(actualBarcode);
-          await ProductController.insertProductData(OpenFoodAPIResponse);
-          navigation.navigate('Product Details', { product: OpenFoodAPIResponse });
-        }
-      }
+      handleImageSelection(response);
     });
+  };
+
+  const captureImageWithCamera = async () => {
+    launchCamera({ mediaType: 'photo', cameraType: 'back' }, async (response) => {
+      handleImageSelection(response);
+    });
+  };
+
+  const handleImageSelection = async (response) => {
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (response.errorCode) {
+      console.error('ImagePicker error: ', response.errorMessage);
+    } else if (response.assets && response.assets.length > 0) {
+      const { uri } = response.assets[0];
+      setSelectedImage(uri);
+      const base64String = await convertImageToBase64(uri);
+      const actualBarcode = await handleImageProcessing(base64String);
+      if (actualBarcode) {
+        const OpenFoodAPIResponse = await ProductController.handleOpenFoodAPI(actualBarcode);
+        await ProductController.insertProductData(OpenFoodAPIResponse);
+        navigation.navigate('Product Details', { product: OpenFoodAPIResponse });
+      }
+    }
   };
 
   const convertImageToBase64 = async (imageUri) => {
@@ -57,8 +67,12 @@ const ProductScannerView = ({ navigation }) => {
 
   return (
     <View style={style.container}>
-      <Text style={style.title}>ProductScannerView</Text>
-      <Button title="Select Photo From Library" onPress={selectImageFromLibrary} />
+      <TouchableOpacity style={style.button} onPress={captureImageWithCamera}>
+        <Text style={style.buttonText}>Capture Photo with Camera</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={style.button} onPress={selectImageFromLibrary}>
+        <Text style={style.buttonText}>Select Photo From Library</Text>
+      </TouchableOpacity>
       {selectedImage && <Image source={{ uri: selectedImage }} style={style.preview} />}
     </View>
   );
@@ -78,6 +92,25 @@ const style = StyleSheet.create({
     width: 200,
     height: 200,
     marginTop: 20,
+  },
+  button: {
+    padding: 15,
+    backgroundColor: '#fdb813',
+    borderRadius: 8,
+    marginVertical: 10,
+    width: '80%',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3.84,
+    elevation: 5,
+    margin:10,
+  },
+  buttonText: {
+    // color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

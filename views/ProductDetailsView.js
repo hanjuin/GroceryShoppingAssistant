@@ -1,30 +1,17 @@
-import { useEffect } from 'react';
-import React from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Dimensions, ImageBackground } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const ProductDetailsView = ({ route, navigation }) => {
-  const { product } = route.params; // Access the product details passed via navigation
-
-  // Function to render nutritional info in a more readable format
-  const renderNutritionalInfo = (nutriments) => {
-    const keys = Object.keys(nutriments);
-    return keys.map((key, index) => {
-      return (
-        <View key={index} style={styles.nutrientRow}>
-          <Text style={styles.nutrientKey}>{key.replace(/_/g, ' ')}:</Text>
-          <Text style={styles.nutrientValue}>{nutriments[key]}</Text>
-        </View>
-      );
-    });
-  };
-
+  const { product } = route.params;
   // Function to render ingredients as a list
   const renderIngredients = (ingredientsText) => {
-    if (!ingredientsText) {return <Text style={styles.cell}>N/A</Text>;}
+    if (!ingredientsText) {
+      return <Text style={styles.cell}>N/A</Text>;
+    }
     const ingredientsList = ingredientsText.split(','); // Split ingredients by commas
     return ingredientsList.map((ingredient, index) => (
-      <Text key={index} style={styles.ingredientItem}>
+      <Text key={index} style={styles.cell}>
         {ingredient.trim()}
       </Text>
     ));
@@ -34,7 +21,7 @@ const ProductDetailsView = ({ route, navigation }) => {
     navigation.setOptions({
       headerLeft: () => (
         <TouchableOpacity onPress={() => navigation.navigate('Product List')}>
-          <MaterialIcons name='arrow-back' size={24} style={styles.backbutton}></MaterialIcons>
+          <MaterialIcons name='arrow-back' size={28} style={styles.backButton} color="#333" />
         </TouchableOpacity>
       ),
     });
@@ -43,59 +30,70 @@ const ProductDetailsView = ({ route, navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
-        {product.image_url && <Image source={{ uri: product.image_url }} style={styles.productImage} />}
-        <Text style={styles.title}>{product.product_name || 'Product Details'}</Text>
-
+        {/* <Text style={styles.title}>{product.product_name || 'Product Details'}</Text> */}
+        {/* {product.image_url && <Image source={{ uri: product.image_url }} style={styles.productImage}/>} */}
+        {/* Blurred Background Image */}
+        <View style={styles.imageContainer}>
+        <ImageBackground
+          source={{ uri: product.image_url }}
+          blurRadius={2}
+          style={styles.backgroundImage}
+        >
+          {/* Clear Image */}
+          <Image
+            source={{ uri: product.image_url }}
+            style={styles.productImage}
+          />
+        </ImageBackground>
+        </View>
         {/* Table for Product Details */}
         <View style={styles.table}>
-          <View style={styles.row}>
+        <View style={styles.productItem}>
+            <Text style={styles.cellTitle}>Product Name:</Text>
+            <Text style={styles.cell}>{product.product_name || 'N/A'}</Text>
+          </View>
+          <View style={styles.productItem}>
             <Text style={styles.cellTitle}>Brand:</Text>
             <Text style={styles.cell}>{product.brands || 'N/A'}</Text>
           </View>
-          <View style={styles.row}>
+          <View style={styles.productItem}>
             <Text style={styles.cellTitle}>Ingredients:</Text>
             <View style={styles.cell}>{renderIngredients(product.ingredients_text)}</View>
           </View>
-          <View style={styles.row}>
+          <View style={styles.productItem}>
             <Text style={styles.cellTitle}>Recyclability:</Text>
             <Text style={styles.cell}>{product.AIresult[0] + ' out of 5' || 'N/A'}</Text>
           </View>
-          <View style={styles.row}>
+          <View style={styles.productItem}>
             <Text style={styles.cellTitle}>Material Name:</Text>
             <Text style={styles.cell}>{product.AIresult[1] || 'N/A'}</Text>
           </View>
-          <View style={styles.row}>
+          <View style={styles.productItem}>
             <Text style={styles.cellTitle}>Estimated Carbon Footprint:</Text>
-            <Text style={styles.cell}>{product.AIresult[2] || 'N/A'}</Text>
+            <Text style={styles.cell}>{product.AIresult[2] + ' CO2e' || 'N/A'}</Text>
           </View>
-          <View style={styles.row}>
+          <View style={styles.productItem}>
             <Text style={styles.cellTitle}>Reuse rate as a percentage:</Text>
             <Text style={styles.cell}>{product.AIresult[4] + '%' || 'N/A'}</Text>
           </View>
-          <View style={styles.row}>
+          <View style={styles.productItem}>
             <Text style={styles.cellTitle}>Decomposition time in years:</Text>
             <Text style={styles.cell}>{product.AIresult[5] + ' years' || 'N/A'}</Text>
           </View>
-          <View style={styles.row}>
+          <View style={styles.productItem}>
             <Text style={styles.cellTitle}>Toxicity:</Text>
             <Text style={styles.cell}>{product.AIresult[6] || 'N/A'}</Text>
           </View>
-          <View style={styles.row}>
+          <View style={styles.productItem}>
             <Text style={styles.cellTitle}>Overall Product Rating:</Text>
             <Text style={styles.cell}>{product.AIresult[3] + ' out of 10' || 'N/A'}</Text>
           </View>
-
-          {/* <View style={styles.row}>
-            <Text style={styles.cellTitle}>Nutritional Info:</Text>
-            <View style={styles.nutritionalInfoContainer}>
-              {product.nutriments ? renderNutritionalInfo(product.nutriments) : <Text>N/A</Text>}
-            </View>
-          </View> */}
         </View>
       </View>
     </ScrollView>
   );
 };
+const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -108,59 +106,68 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   title: {
-    fontSize: 22,
+    fontSize: 30,
     fontWeight: 'bold',
     marginBottom: 10,
+    textAlign: 'center',
+  },
+  imageContainer: {
+    marginVertical: 20,
+    borderRadius: 10,
+    overflow: 'hidden',
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  backgroundImage: {
+    width: '100%',
+    height: screenWidth,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   productImage: {
-    width: '100%',
-    height: 200,
-    marginTop: 10,
-    resizeMode: 'contain',
+    width: 200,
+    height: screenWidth,
   },
   table: {
     marginTop: 20,
   },
-  row: {
+  productItem: {
     flexDirection: 'row',
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
+    justifyContent: 'space-between',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    marginBottom: 8,
+    backgroundColor: '#fdb813',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 3,
   },
   cellTitle: {
     flex: 1,
     fontWeight: 'bold',
     fontSize: 16,
+    color: '#333',
   },
   cell: {
     flex: 2,
     fontSize: 16,
+    color: '#333',
   },
   ingredientItem: {
     fontSize: 14,
     marginBottom: 2,
   },
-  nutritionalInfoContainer: {
-    flex: 2,
-  },
-  nutrientRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: 2,
-  },
-  nutrientKey: {
-    fontWeight: 'bold',
-    fontSize: 14,
-    flex: 1,
-  },
-  nutrientValue: {
-    fontSize: 14,
-    flex: 1,
-    textAlign: 'right',
-  },
-  backbutton:{
-    paddingLeft:10,
+  backButton: {
+    paddingLeft: 10,
   },
 });
 
 export default ProductDetailsView;
+
+

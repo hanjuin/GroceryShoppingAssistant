@@ -26,7 +26,7 @@ const ProductListView = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Scanned Products</Text>
+            {/* <Text style={styles.title}>Scanned Products</Text> */}
             <FlatList
                 data={scannedProducts}
                 renderItem={renderProductItem}
@@ -43,18 +43,44 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#fff',
   },
-  title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
   productItem: {
+    flexDirection: 'row',
     padding: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
+    backgroundColor: '#fdb813',
+    borderRadius: 10,
+    marginBottom: 10,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 3,
+  },
+  productImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 15,
+  },
+  productDetails: {
+    flex: 1,
+    justifyContent: 'center',
   },
   productName: {
     fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  productBrand: {
+    fontSize: 14,
+    color: '#666',
+  },
+  productPrice: {
+    fontSize: 14,
+    color: '#888',
+    fontStyle: 'italic',
   },
 });
 

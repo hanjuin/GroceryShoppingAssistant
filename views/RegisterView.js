@@ -1,16 +1,7 @@
 import React, { useState } from 'react';
-import {
-  View,
-  TextInput,
-  Button,
-  Alert,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  Platform,
-} from 'react-native';
+import { View, TextInput, Alert, StyleSheet, TouchableOpacity, Text,Platform} from 'react-native';
 import { insertUserData } from '../controllers/UserController';
-// import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const RegisterView = ({ navigation }) => {
@@ -51,6 +42,13 @@ const RegisterView = ({ navigation }) => {
 
       if (result.success) {
         Alert.alert('Success', 'User registered successfully');
+        setUserID('');
+        setPassword('');
+        setFirstName('');
+        setLastName('');
+        setGender('');
+        setEmail('');
+        setDob(new Date());
         navigation.navigate('Login'); // Fix navigation
       } else {
         Alert.alert('Error', result.message || 'Failed to register user');
@@ -129,14 +127,14 @@ const RegisterView = ({ navigation }) => {
       <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.textinput}>
         <Text>{dob.toDateString()}</Text>
       </TouchableOpacity>
-      {/* {showDatePicker && (
+      {showDatePicker && (
         <DateTimePicker
           value={dob}
           mode="date"
           display="default"
           onChange={handleDateChange}
         />
-      )} */}
+      )}
 
       {/* Create Account Button */}
       <View style={styles.buttonContainer}>
