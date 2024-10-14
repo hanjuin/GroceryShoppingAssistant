@@ -1,7 +1,9 @@
+import { useEffect } from 'react';
 import React from 'react';
-import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const ProductDetailsView = ({ route }) => {
+const ProductDetailsView = ({ route, navigation }) => {
   const { product } = route.params; // Access the product details passed via navigation
 
   // Function to render nutritional info in a more readable format
@@ -28,11 +30,22 @@ const ProductDetailsView = ({ route }) => {
     ));
   };
 
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity onPress={() => navigation.navigate('Product List')}>
+          <MaterialIcons name='arrow-back' size={24} style={styles.backbutton}></MaterialIcons>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
+
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
         {product.image_url && <Image source={{ uri: product.image_url }} style={styles.productImage} />}
         <Text style={styles.title}>{product.product_name || 'Product Details'}</Text>
+
         {/* Table for Product Details */}
         <View style={styles.table}>
           <View style={styles.row}>
@@ -144,6 +157,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     flex: 1,
     textAlign: 'right',
+  },
+  backbutton:{
+    paddingLeft:10,
   },
 });
 

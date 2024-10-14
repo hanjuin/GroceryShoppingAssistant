@@ -58,3 +58,17 @@ export const getProductByBarcode = async (barcode) => {
         console.error('Error fetching product from server:', error);
       }
 };
+
+export const getAllProduct = async () => {
+  try {
+    const response = await fetch('http://10.0.2.2:3000/get-products');
+    if (!response.ok) {
+      throw new Error('No product added');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching product from server:', error);
+    return []; // Return an empty array if an error occurs
+  }
+};

@@ -7,14 +7,17 @@ import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { Platform, PermissionsAndroid } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
 import RegisterView from './views/RegisterView';
 import LoginView from './views/LoginView';
 import HomeView from './views/HomeView';
+import ProductListView from './views/ProductListView';
 import ProductDetailsView from './views/ProductDetailsView';
 import ProductScannerView from './views/ProductScannerView';
 import SettingsView from './views/SettingsView';
 import ShoppingListView from './views/ShoppingListView';
 import LogoutView from './views/LogoutView';
+
 
 const requestCameraPermission = async () => {
   const result = await request(
@@ -98,7 +101,8 @@ const App = () => {
         ) : (
           <>
             <Drawer.Screen name="Home" component={HomeView} />
-            <Drawer.Screen name="Product Details" component={ProductDetailsView} />
+            <Drawer.Screen name="Product List" component={ProductListView} />
+            {/* <Drawer.Screen name="Product Details" component={ProductDetailsView} /> */}
             <Drawer.Screen name="Product Scanner" component={ProductScannerView} />
             <Drawer.Screen name="Shopping List" component={ShoppingListView} />
             <Drawer.Screen name="Settings" component={SettingsView} />
@@ -108,6 +112,11 @@ const App = () => {
             </Drawer.Screen>
           </>
         )}
+        <Drawer.Screen
+        name="Product Details"
+        component={ProductDetailsView}
+        options={{ drawerLabel: () => null, title: null, drawerIcon: () => null }}
+        />
       </Drawer.Navigator>
     </NavigationContainer>
   );
