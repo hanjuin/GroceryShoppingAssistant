@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { View, TextInput, Alert, StyleSheet, TouchableOpacity, Text,Platform} from 'react-native';
+import { View, TextInput, Alert, StyleSheet, TouchableOpacity, Text,Platform, TextComponent} from 'react-native';
 import { insertUserData } from '../controllers/UserController';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const RegisterView = ({ navigation }) => {
   const [userID, setUserID] = useState('');
@@ -14,16 +13,19 @@ const RegisterView = ({ navigation }) => {
   const [dob, setDob] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const validateEmail = (email) => {
+  //validation email regex
+  const validateEmail = (e) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(String(email).toLowerCase());
+    return re.test(String(e).toLowerCase());
   };
 
-  const validatePassword = (password) => {
+  //validation password regex
+  const validatePassword = (p) => {
     const re = /^(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-    return re.test(password);
+    return re.test(p);
   };
 
+  //function to add user to database
   const handleRegister = async () => {
     if (!validateEmail(email)) {
       return Alert.alert('Invalid Email', 'Please enter a valid email address.');
@@ -37,8 +39,8 @@ const RegisterView = ({ navigation }) => {
     }
 
     try {
-      const userData = { userID, password, firstname, lastname, email, gender, dob: dob.toDateString() };
-      const result = await insertUserData(userData);
+      const userData = { userID, password, firstname, lastname, email, gender, dob: dob.toDateString() }; //create the user
+      const result = await insertUserData(userData); //insert data to database
 
       if (result.success) {
         Alert.alert('Success', 'User registered successfully');
@@ -49,7 +51,7 @@ const RegisterView = ({ navigation }) => {
         setGender('');
         setEmail('');
         setDob(new Date());
-        navigation.navigate('Login'); // Fix navigation
+        navigation.navigate('Login');
       } else {
         Alert.alert('Error', result.message || 'Failed to register user');
       }
@@ -72,34 +74,41 @@ const RegisterView = ({ navigation }) => {
         value={userID}
         onChangeText={setUserID}
         style={styles.textinput}
+        placeholderTextColor="#000"
       />
-      <TextInput
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={styles.textinput}
-      />
+      <View style = {styles.passwordcontainer}>
+        <TextInput
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          style={styles.textinputpass}
+          placeholderTextColor="#000"
+        />
+        <Text style={styles.passlabel}>*At least 8 character with 1 special character</Text>
+      </View>
       <TextInput
         placeholder="First Name"
         value={firstname}
         onChangeText={setFirstName}
         style={styles.textinput}
+        placeholderTextColor="#000"
       />
       <TextInput
         placeholder="Last Name"
         value={lastname}
         onChangeText={setLastName}
         style={styles.textinput}
+        placeholderTextColor="#000"
       />
       <TextInput
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
         style={styles.textinput}
+        placeholderTextColor="#000"
       />
 
-      {/* Gender Picker */}
       <Text style={styles.label}>Gender</Text>
       <View style={styles.pickerContainer}>
         <TouchableOpacity
@@ -122,10 +131,9 @@ const RegisterView = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      {/* Date of Birth */}
       <Text style={styles.label}>Date of Birth</Text>
       <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.textinput}>
-        <Text>{dob.toDateString()}</Text>
+        <Text style={styles.dobcolor}>{dob.toDateString()}</Text>
       </TouchableOpacity>
       {showDatePicker && (
         <DateTimePicker
@@ -133,10 +141,10 @@ const RegisterView = ({ navigation }) => {
           mode="date"
           display="default"
           onChange={handleDateChange}
+
         />
       )}
 
-      {/* Create Account Button */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={handleRegister} style={styles.registerButton}>
           <Text style={styles.buttonText}>Create New Account</Text>
@@ -160,9 +168,28 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  textinputpass: {
+    borderWidth: 1,
+    padding: 10,
+    // marginBottom: 10,
+    borderRadius: 8,
+    backgroundColor: '#fdb813',
+    fontWeight: 'bold',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  passwordcontainer:{
+    marginBottom: 10,
+  },
+  passlabel:{
+    color:'#000',
+  },
   viewStyle: {
     flex: 1,
-    backgroundColor: '#b3a089', // Background color
+    backgroundColor: '#b3a089',
     padding: 20,
   },
   pickerContainer: {
@@ -174,11 +201,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5,
+    color:'#000',
   },
   genderButton: (isActive) => ({
     flex: 1,
     padding: 10,
-    backgroundColor: isActive ? '#333333' : '#fdb813', // Active: Grey, Inactive: Yellow
+    backgroundColor: isActive ? '#333333' : '#fdb813',
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
@@ -190,7 +218,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   }),
   genderText: (isActive) => ({
-    color: isActive ? '#FFFFFF' : '#333', // Active: White, Inactive: Dark Grey
+    color: isActive ? '#FFFFFF' : '#000',
     fontSize: 14,
     fontWeight: 'bold',
   }),
@@ -213,6 +241,9 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#FFFFFF',
+  },
+  dobcolor:{
+    color:'#000',
   },
 });
 

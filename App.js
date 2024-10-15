@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import 'react-native-gesture-handler';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { Platform, PermissionsAndroid } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -17,6 +17,7 @@ import ProductScannerView from './views/ProductScannerView';
 import SettingsView from './views/SettingsView';
 import ShoppingListView from './views/ShoppingListView';
 import LogoutView from './views/LogoutView';
+import { Header } from 'react-native/Libraries/NewAppScreen';
 
 
 const requestCameraPermission = async () => {
@@ -61,7 +62,6 @@ const App = () => {
   const [loading, setLoading] = useState(true); // Track loading state
 
   useEffect(() => {
-    // Request necessary permissions
     requestPhotoLibraryPermission();
     requestCameraPermission();
 
@@ -72,7 +72,7 @@ const App = () => {
       } catch (error) {
         console.error('Failed to check login status:', error);
       } finally {
-        setLoading(false); // Ensure this is set to false at the right time
+        setLoading(false);
       }
     };
     checkLoginStatus();
@@ -89,8 +89,26 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName={isLoggedIn ? 'Home' : 'Login'}>
-        {/* If the user is not logged in, show only the Login screen */}
+      <Drawer.Navigator
+        initialRouteName={isLoggedIn ? 'Home' : 'Login'}
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: '#fdb813', // Your desired color for the header background
+            // borderWidth:1,
+            // borderColor:'#000',
+            // borderRadius:2,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.3,
+            shadowRadius: 3.84,
+            elevation: 5,
+          },
+          headerTintColor: '#000', // Text/icon color in the header
+          headerTitleStyle: {
+            fontWeight: 'bold', // Optional: make the title bold
+          },
+        }}
+      >
         {!isLoggedIn ? (
           <>
             <Drawer.Screen name="Login">
@@ -102,7 +120,6 @@ const App = () => {
           <>
             <Drawer.Screen name="Home" component={HomeView} />
             <Drawer.Screen name="Product List" component={ProductListView} />
-            {/* <Drawer.Screen name="Product Details" component={ProductDetailsView} /> */}
             <Drawer.Screen name="Product Scanner" component={ProductScannerView} />
             <Drawer.Screen name="Shopping List" component={ShoppingListView} />
             <Drawer.Screen name="Settings" component={SettingsView} />
@@ -112,10 +129,15 @@ const App = () => {
             </Drawer.Screen>
           </>
         )}
+        {/* Product Details Screen - Hidden from Drawer */}
         <Drawer.Screen
-        name="Product Details"
-        component={ProductDetailsView}
-        options={{ drawerLabel: () => null, title: null, drawerIcon: () => null }}
+          name="Product Details"
+          component={ProductDetailsView}
+          options={{
+            drawerLabel: () => null,
+            title: null,
+            drawerIcon: () => null,
+          }}
         />
       </Drawer.Navigator>
     </NavigationContainer>

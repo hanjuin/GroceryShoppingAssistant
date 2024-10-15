@@ -5,13 +5,13 @@ import { getAllProduct } from '../controllers/ProductController';
 const ProductListView = ({ navigation }) => {
     const [scannedProducts, setScannedProducts] = useState([]);
 
+    // function to fetch all product
     useEffect(() => {
         const fetchProducts = async () => {
-            const products = await getAllProduct(); // Wait for products to be fetched
-            setScannedProducts(products); // Set fetched products to state
+            const products = await getAllProduct();
+            setScannedProducts(products);
         };
-
-        fetchProducts(); // Call the async function inside useEffect
+        fetchProducts();
     }, []);
 
     // Render each product in the list
@@ -26,7 +26,6 @@ const ProductListView = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            {/* <Text style={styles.title}>Scanned Products</Text> */}
             <FlatList
                 data={scannedProducts}
                 renderItem={renderProductItem}
@@ -71,7 +70,7 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#000',
   },
   productBrand: {
     fontSize: 14,

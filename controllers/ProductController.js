@@ -1,5 +1,6 @@
-import {processBarcodeFromImage, fetchOpenAIResponse, fetchOpenFoodFactsData } from '../models/ProductModel';
+import {processBarcodeFromImage, fetchOpenFoodFactsData } from '../models/ProductModel';
 
+//function to handle barcode processing, fetching base64image data and process the data using google vision API
 export const handleBarcodeProcessing = async (base64Image) => {
   try {
     const barcodeData = await processBarcodeFromImage(base64Image);
@@ -10,16 +11,7 @@ export const handleBarcodeProcessing = async (base64Image) => {
   }
 };
 
-export const handleOpenAIProcessing = async (barcode) => {
-    try {
-      const OpenAIResponse = await fetchOpenAIResponse(barcode);
-      return OpenAIResponse;
-    } catch (error) {
-      console.error('Error in OpenAIResponse processing:', error);
-      throw error;
-    }
-  };
-
+//function to retrieve product data from openfoodapi
 export const handleOpenFoodAPI = async (barcode) => {
     try {
       const OpenAIResponse = await fetchOpenFoodFactsData(barcode);
@@ -30,22 +22,24 @@ export const handleOpenFoodAPI = async (barcode) => {
     }
 };
 
+//function to add product data to database
 export const insertProductData = async (productData) => {
-    try {
-        const response = await fetch('http://10.0.2.2:3000/add-product', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(productData),
-        });
-        const result = await response.json();
-        console.log('Server Response:', result);
-      } catch (error) {
-        console.error('Error adding product to server:', error);
-    }
+  try {
+      const response = await fetch('http://10.0.2.2:3000/add-product', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(productData),
+      });
+      const result = await response.json();
+      console.log('Server Response:', result);
+    } catch (error) {
+      console.error('Error adding product to server:', error);
+  }
 };
 
+//function to get product from database using barcode
 export const getProductByBarcode = async (barcode) => {
     try {
         const response = await fetch(`http://10.0.2.2:3000/get-product/${barcode}`);
@@ -59,6 +53,7 @@ export const getProductByBarcode = async (barcode) => {
       }
 };
 
+//function to get all product from database
 export const getAllProduct = async () => {
   try {
     const response = await fetch('http://10.0.2.2:3000/get-products');
@@ -69,6 +64,6 @@ export const getAllProduct = async () => {
     return data;
   } catch (error) {
     console.error('Error fetching product from server:', error);
-    return []; // Return an empty array if an error occurs
+    return [];
   }
 };

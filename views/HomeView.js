@@ -1,8 +1,9 @@
-import React from "react";
+import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-const HomeView = ({ navigation }) => {  // Ensure navigation is destructured
+const HomeView = ({ navigation }) => {
 
+    //navigate to other screen function
     const handleNavigation = (view) => {
         navigation.navigate(view);
     };
@@ -29,7 +30,6 @@ const styles = StyleSheet.create({
         flex:1,
         justifyContent: 'center',
         alignItems: 'center',
-
     },
     title:{
         fontSize:20,
@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width:'100%',
-       // marginTop: -40,
     },
     button: {
         width: '50%',
@@ -57,6 +56,7 @@ const styles = StyleSheet.create({
     buttonText: {
         fontSize: 16,
         fontWeight: 'bold',
+        color:'#000',
       },
 });
 

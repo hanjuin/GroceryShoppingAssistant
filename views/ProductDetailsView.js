@@ -4,6 +4,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const ProductDetailsView = ({ route, navigation }) => {
   const { product } = route.params;
+
   // Function to render ingredients as a list
   const renderIngredients = (ingredientsText) => {
     if (!ingredientsText) {
@@ -17,38 +18,37 @@ const ProductDetailsView = ({ route, navigation }) => {
     ));
   };
 
+  // Function to create the backbutton
+  const headerLeftComponent = () => (
+    <TouchableOpacity onPress={() => navigation.navigate('Product List')}>
+      <MaterialIcons name="arrow-back" size={28} style={styles.backButton} color="#333" />
+    </TouchableOpacity>
+  );
+
+  // set the hamburger button to backbutton
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: () => (
-        <TouchableOpacity onPress={() => navigation.navigate('Product List')}>
-          <MaterialIcons name='arrow-back' size={28} style={styles.backButton} color="#333" />
-        </TouchableOpacity>
-      ),
+      headerLeft: headerLeftComponent,
     });
-  }, [navigation]);
+  });
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
-        {/* <Text style={styles.title}>{product.product_name || 'Product Details'}</Text> */}
-        {/* {product.image_url && <Image source={{ uri: product.image_url }} style={styles.productImage}/>} */}
-        {/* Blurred Background Image */}
         <View style={styles.imageContainer}>
         <ImageBackground
           source={{ uri: product.image_url }}
           blurRadius={2}
           style={styles.backgroundImage}
         >
-          {/* Clear Image */}
           <Image
             source={{ uri: product.image_url }}
             style={styles.productImage}
           />
         </ImageBackground>
         </View>
-        {/* Table for Product Details */}
         <View style={styles.table}>
-        <View style={styles.productItem}>
+          <View style={styles.productItem}>
             <Text style={styles.cellTitle}>Product Name:</Text>
             <Text style={styles.cell}>{product.product_name || 'N/A'}</Text>
           </View>
@@ -93,8 +93,8 @@ const ProductDetailsView = ({ route, navigation }) => {
     </ScrollView>
   );
 };
-const screenWidth = Dimensions.get('window').width;
 
+const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
@@ -152,12 +152,12 @@ const styles = StyleSheet.create({
     flex: 1,
     fontWeight: 'bold',
     fontSize: 16,
-    color: '#333',
+    color: '#000',
   },
   cell: {
     flex: 2,
     fontSize: 16,
-    color: '#333',
+    color: '#000',
   },
   ingredientItem: {
     fontSize: 14,
@@ -165,9 +165,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     paddingLeft: 10,
+    color:'#000',
   },
 });
 
 export default ProductDetailsView;
-
-

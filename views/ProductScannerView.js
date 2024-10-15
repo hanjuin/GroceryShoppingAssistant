@@ -7,18 +7,21 @@ import * as ProductController from '../controllers/ProductController';
 const ProductScannerView = ({ navigation }) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
+  //Function to access photo library
   const selectImageFromLibrary = async () => {
     launchImageLibrary({ mediaType: 'photo' }, async (response) => {
       handleImageSelection(response);
     });
   };
 
+  //Function to access camera
   const captureImageWithCamera = async () => {
     launchCamera({ mediaType: 'photo', cameraType: 'back' }, async (response) => {
       handleImageSelection(response);
     });
   };
 
+  //Function to process the image to retrieve barcode
   const handleImageSelection = async (response) => {
     if (response.didCancel) {
       console.log('User cancelled image picker');
@@ -28,15 +31,16 @@ const ProductScannerView = ({ navigation }) => {
       const { uri } = response.assets[0];
       setSelectedImage(uri);
       const base64String = await convertImageToBase64(uri);
-      const actualBarcode = await handleImageProcessing(base64String);
+      const actualBarcode = await handleImageProcessing(base64String); //function to retrieve barcode from image
       if (actualBarcode) {
-        const OpenFoodAPIResponse = await ProductController.handleOpenFoodAPI(actualBarcode);
-        await ProductController.insertProductData(OpenFoodAPIResponse);
-        navigation.navigate('Product Details', { product: OpenFoodAPIResponse });
+        const OpenFoodAPIResponse = await ProductController.handleOpenFoodAPI(actualBarcode); //function to retrieve product info from OpenFoodAPI
+        await ProductController.insertProductData(OpenFoodAPIResponse); //function to insert product data to database
+        navigation.navigate('Product Details', { product: OpenFoodAPIResponse }); //navigate to product details
       }
     }
   };
 
+  //concert image to base64 for image processing
   const convertImageToBase64 = async (imageUri) => {
     try {
       const base64String = await RNFS.readFile(imageUri.replace('file://', ''), 'base64');
@@ -46,11 +50,12 @@ const ProductScannerView = ({ navigation }) => {
     }
   };
 
+  //function to retrieve barcode from image
   const handleImageProcessing = async (base64String) => {
     try {
       const barcodeData = await ProductController.handleBarcodeProcessing(base64String);
-      const upcARegex = /\d{12,13}/;
-      const exactMatch = /^\d{12,13}$/;
+      const upcARegex = /\d{12,13}/; //regex to extract barcode from processed data
+      const exactMatch = /^\d{12,13}$/; 
       const trimData = barcodeData.replace(/\s+/g, ''); // Remove spaces from the barcode data
       const actualBarcode = trimData.match(upcARegex);
       if (actualBarcode && exactMatch.test(actualBarcode[0])) {
@@ -108,9 +113,9 @@ const style = StyleSheet.create({
     margin:10,
   },
   buttonText: {
-    // color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
+    color:'#000',
   },
 });
 

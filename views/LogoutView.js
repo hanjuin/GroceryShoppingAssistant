@@ -1,8 +1,16 @@
 import React, { useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LogoutView = ({ navigation, route }) => {
+
+  useEffect(() => {
+    const logout = async () => {
+      await handleLogout();
+      navigation.navigate('Login');
+    };
+    logout();
+  });
 
   const handleLogout = async () => {
     try {
@@ -14,19 +22,17 @@ const LogoutView = ({ navigation, route }) => {
     }
   };
 
-  useEffect(() => {
-    const logout = async () => {
-      await handleLogout(); // Perform the logout
-      navigation.navigate('Login'); // Navigate to the login screen after logout
-    };
-    logout();
-  }, [navigation]);
-
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={styles}>
       <Text>Logging out...</Text>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center'
+});
 
 export default LogoutView;
