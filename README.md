@@ -21,7 +21,7 @@ React Native CLI
 1. Clone this repository to your local machine:
 ```
 git clone https://github.com/hanjuin/GroceryShoppingAssistantServer
-cd GroceryShoppingAssistant-master
+cd GroceryShoppingAssistantServer
 ```
 
 2. Installing the Dependencies
@@ -76,6 +76,7 @@ npx react-native start --reset-cache
 A test account is available in the database for convenience:
 
 > UserID: testing
+
 > Password: testing!@
 
 You can use these credentials if you prefer to skip the registration process.
@@ -85,7 +86,7 @@ If you are running the app on an emulator, ensure you have some barcode images s
 Two sample barcodes are provided in the `test_barcode` folder. 
 Simply drag these images into the emulator to add them to the photo library.
 
-To scan a barcode:
+#To scan a barcode:
 
 Click the "Scan Product" button on the home screen.
 Select "Select Photo From Library" and choose a barcode image.
