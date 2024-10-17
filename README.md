@@ -6,15 +6,15 @@ This is a React Native application designed as part of an assignment for a mobil
 
 Ensure you have the following tools installed on your machine:
 
-Node.js (Recommended version 16 or later)
+- Node.js (Recommended version 16 or later)
 
-npm (Usually comes with Node.js)
+- npm (Usually comes with Node.js)
 
-Git
+- Git
 
-Android Studio (for Android emulator)
+- Android Studio (for Android emulator - **Preferably API 34** ) 
 
-React Native CLI
+- React Native CLI
 
 ## Clone and run the server
 
@@ -86,7 +86,7 @@ If you are running the app on an emulator, ensure you have some barcode images s
 Two sample barcodes are provided in the `test_barcode` folder. 
 Simply drag these images into the emulator to add them to the photo library.
 
-#To scan a barcode:
+### To scan a barcode:
 
 Click the "Scan Product" button on the home screen.
 Select "Select Photo From Library" and choose a barcode image.
