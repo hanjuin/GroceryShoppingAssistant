@@ -75,7 +75,7 @@ npx react-native start --reset-cache
 ## Instruction to login
 A test account is available in the database for convenience:
 
-> UserID: testing
+> User ID: testing
 
 > Password: testing!@
 
