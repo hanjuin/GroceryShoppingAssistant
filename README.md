@@ -16,6 +16,27 @@ Android Studio (for Android emulator)
 
 React Native CLI
 
+## Clone and run the server
+
+1. Clone this repository to your local machine:
+```
+git clone https://github.com/hanjuin/GroceryShoppingAssistantServer
+cd GroceryShoppingAssistant-master
+```
+
+2. Installing the Dependencies
+```
+npm install
+```
+This will install all necessary packages listed in the package.json file.
+
+3. Run the server
+```
+Node server.js
+```
+This will run the server on the local machine.
+
+
 ## Cloning the project
 
 1. Clone this repository to your local machine:
@@ -50,3 +71,23 @@ Resetting Metro's cache:
 ```
 npx react-native start --reset-cache
 ```
+
+## Instruction to login
+A test account is available in the database for convenience:
+
+> UserID: testing
+> Password: testing!@
+
+You can use these credentials if you prefer to skip the registration process.
+
+## Instruction to scan a barcode
+If you are running the app on an emulator, ensure you have some barcode images stored in the emulator’s photo library. 
+Two sample barcodes are provided in the `test_barcode` folder. 
+Simply drag these images into the emulator to add them to the photo library.
+
+To scan a barcode:
+
+Click the "Scan Product" button on the home screen.
+Select "Select Photo From Library" and choose a barcode image.
+Wait for a moment until an alert pops up, then click "Ok."
+The app will automatically navigate to the product details screen.

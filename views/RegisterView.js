@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Alert, StyleSheet, TouchableOpacity, Text,Platform, TextComponent} from 'react-native';
+import { View, TextInput, Alert, StyleSheet, TouchableOpacity, Text,Platform} from 'react-native';
 import { insertUserData } from '../controllers/UserController';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
