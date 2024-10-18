@@ -13,7 +13,7 @@ export const processBarcodeFromImage = async (base64Image) => {
             },
             features: [
               {
-                type: 'TEXT_DETECTION', // Use BARCODE_DETECTION if available
+                type: 'TEXT_DETECTION',
                 maxResults: 5,
               },
             ],
