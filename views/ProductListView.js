@@ -1,18 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, {useState, useCallback } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { getAllProduct } from '../controllers/ProductController';
+import { useFocusEffect } from '@react-navigation/native';
 
 const ProductListView = ({ navigation }) => {
     const [scannedProducts, setScannedProducts] = useState([]);
 
-    // function to fetch all product
-    useEffect(() => {
-        const fetchProducts = async () => {
-            const products = await getAllProduct();
-            setScannedProducts(products);
-        };
-        fetchProducts();
-    }, []);
+    // function to fetch all products
+    const fetchProducts = async () => {
+      const products = await getAllProduct();
+      setScannedProducts(products);
+    };
+
+    // useFocusEffect to update the product list every time the screen is focused
+    useFocusEffect(
+      useCallback(() => {
+          fetchProducts(); // Fetch products when the screen comes into focus
+      }, [])
+    );
 
     // Render each product in the list
     const renderProductItem = ({ item }) => (

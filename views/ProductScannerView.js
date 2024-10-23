@@ -33,10 +33,19 @@ const ProductScannerView = ({ navigation }) => {
       const base64String = await convertImageToBase64(uri);
       const actualBarcode = await handleImageProcessing(base64String); //function to retrieve barcode from image
       if (actualBarcode) {
-        const OpenFoodAPIResponse = await ProductController.handleOpenFoodAPI(actualBarcode); //function to retrieve product info from OpenFoodAPI
-        await ProductController.insertProductData(OpenFoodAPIResponse); //function to insert product data to database
-        navigation.navigate('Product Details', { product: OpenFoodAPIResponse }); //navigate to product details
-      }
+        const OpenFoodAPIResponse = await ProductController.handleOpenFoodAPI(actualBarcode); // Retrieve product info from OpenFoodAPI
+        // Check if the product is found in the OpenFoodAPI response
+        if (OpenFoodAPIResponse != null) {
+            await ProductController.insertProductData(OpenFoodAPIResponse);
+            navigation.navigate('Product Details', { product: OpenFoodAPIResponse });
+        } else {
+            console.warn('Product not found for the given barcode.');
+           Alert.alert('Product not found in the database. Please try again with a different product.');
+        }
+    } else {
+        console.warn('No barcode detected in the image.');
+        Alert.alert('No barcode was detected in the image. Please try again.');
+    }
     }
   };
 
@@ -55,7 +64,7 @@ const ProductScannerView = ({ navigation }) => {
     try {
       const barcodeData = await ProductController.handleBarcodeProcessing(base64String);
       const upcARegex = /\d{12,13}/; //regex to extract barcode from processed data
-      const exactMatch = /^\d{12,13}$/; 
+      const exactMatch = /^\d{12,13}$/;
       const trimData = barcodeData.replace(/\s+/g, ''); // Remove spaces from the barcode data
       const actualBarcode = trimData.match(upcARegex);
       if (actualBarcode && exactMatch.test(actualBarcode[0])) {
