@@ -16,6 +16,10 @@ Ensure you have the following tools installed on your machine:
 
 - React Native CLI
 
+- Preferred JDK 17
+
+- Visual Studio Code
+
 ## Clone and run the server
 
 1. Clone this repository to your local machine:
@@ -52,6 +56,13 @@ npm install
 ```
 This will install all necessary packages listed in the package.json file.
 
+## Setup API key
+1. As API Key could not deploy to Git, the API key needed for the project is in the documentation.
+
+2. Open the .env file
+
+3. Paste the API key from the documentation to the .env file, then save it.
+
 ## Running The Application
 1. Start Metro bundler:
 ```
@@ -71,6 +82,8 @@ Resetting Metro's cache:
 ```
 npx react-native start --reset-cache
 ```
+
+**Make Sure the Java JDK version is JDK 17**
 
 ## Instruction to login
 A test account is available in the database for convenience:
